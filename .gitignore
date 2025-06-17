@@ -1,0 +1,13 @@
+
+*.o
+*.exe
+*.cbp
+*.depend
+*.layout
+*.exe
+*.bat
+*.rar
+build/
+.vscode
+.xmake
+.VSCodeCounter/
