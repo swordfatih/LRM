@@ -1,18 +1,20 @@
-#include "language.hpp"
-#include <iostream>
+#include "responses.hpp"
+#include <spdlog/spdlog.h>
 
 int main()
 {
     spdlog::set_level(spdlog::level::debug);
 
-    language                   language;
-    std::optional<std::string> result;
+    spdlog::info("before response");
+    responses responses;
+    spdlog::info("after response");
 
-    language.query("list all the user created tables and their columns");
-    language.query("insert a new book");
-    language.query("add a color column to books if not exists");
-    language.query("update the color of books to blue");
-    language.query("show all books");
+    responses.create("list all the user created tables and their columns");
+    // responses.create("create a book table if it doesn't exist");
+    // responses.create("insert a new book");
+    // responses.create("add a color column to books if not exists");
+    // responses.create("update the color of books to blue");
+    // responses.create("show all books");
 
     return EXIT_SUCCESS;
 }

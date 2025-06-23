@@ -1,8 +1,16 @@
 #include "database.hpp"
+#include "environment.hpp"
+#include <format>
+#include <spdlog/spdlog.h>
 
 database::database()
 {
-    m_connection = tao::pq::connection::create("dbname=lrm host=45.140.164.225 user=example password=example");
+    m_connection = tao::pq::connection::create(
+        std::format("dbname={} host={} user={} password={}",
+                    environment::get().at("postgres_db"),
+                    environment::get().at("postgres_host"),
+                    environment::get().at("postgres_user"),
+                    environment::get().at("postgres_password")));
 }
 
 database::~database()

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <nlohmann/json.hpp>
-#include <spdlog/spdlog.h>
 #include <tao/pq.hpp>
 
 class database
