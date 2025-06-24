@@ -7,9 +7,11 @@ class database
 {
 public:
     database();
-    ~database();
+    ~database() = default;
 
     std::optional<std::string> execute(const std::string& query);
+    
+    static bool                is_valid_identifier(const std::string& ident);
 
 private:
     std::string format(const tao::pq::result& result);

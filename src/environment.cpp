@@ -5,7 +5,7 @@ environment::environment()
     load(".env");
 }
 
-const env_vars& environment::get()
+env_vars& environment::get()
 {
     static environment environment;
     return environment.m_vars;

@@ -1,5 +1,7 @@
 #include "database.hpp"
 #include "environment.hpp"
+#include <algorithm>
+#include <cctype>
 #include <format>
 #include <spdlog/spdlog.h>
 
@@ -11,10 +13,6 @@ database::database()
                     environment::get().at("postgres_host"),
                     environment::get().at("postgres_user"),
                     environment::get().at("postgres_password")));
-}
-
-database::~database()
-{
 }
 
 std::optional<std::string> database::execute(const std::string& query)
@@ -40,23 +38,37 @@ std::optional<std::string> database::execute(const std::string& query)
     catch(tao::pq::sql_error e)
     {
         spdlog::error("(database.cpp) sql error:\n{}", e.what());
+        return std::format("error with the query: {}", e.what());
     }
-
-    return std::nullopt;
 }
 
 std::string database::format(const tao::pq::result& result)
 {
-    std::string formatted;
+    nlohmann::json output = nlohmann::json::array();
+
     for(const auto& row: result)
     {
+        nlohmann::json json_row;
         for(const auto& field: row)
         {
-            formatted += field.name() + ": " + field.as<std::string>() + "; ";
+            if(field.is_null())
+                json_row[field.name()] = nullptr;
+            else
+                json_row[field.name()] = field.as<std::string>();
         }
-
-        formatted += "\n";
+        output.push_back(json_row);
     }
 
-    return formatted;
+    return output.dump(2);
+}
+
+bool database::is_valid_identifier(const std::string& ident)
+{
+    if(ident.empty() || std::isdigit(ident[0]))
+        return false;
+
+    return std::all_of(ident.begin(), ident.end(), [](char c)
+    {
+        return std::isalnum(c) || c == '_';
+    });
 }

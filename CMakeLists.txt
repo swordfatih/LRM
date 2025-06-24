@@ -12,6 +12,8 @@ target_compile_features(main PRIVATE cxx_std_20)
 file(GLOB SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 target_sources(main PRIVATE ${SOURCES})
 
+target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
 # Fetch and include dependencies
 include(FetchContent)
 
